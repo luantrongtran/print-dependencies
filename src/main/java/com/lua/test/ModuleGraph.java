@@ -3,10 +3,7 @@ package com.lua.test;
 import com.lua.test.exceptions.InvalidInputFileFormatException;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ModuleGraph {
@@ -17,10 +14,42 @@ public class ModuleGraph {
     /**
      * a Map object in which the key is the node name, and the value is the list of its dependencies
      */
-    private Map<String, List<String>> nodesWithDep = new HashMap<>();
+    private Map<String, List<String>> modulesDependencies = new LinkedHashMap<>();
 
     public ModuleGraph(File file) throws IOException {
         parseFile(file);
+    }
+
+    public String getDependencies(String moduleName) {
+        StringBuilder sb = new StringBuilder();
+
+        Set<String> visited = new HashSet<>();
+        Queue<String> queue = new LinkedList<>();
+        queue.add(moduleName);
+
+        goDeep(moduleName, sb, visited);
+
+        return "{" + sb.substring(0, sb.length() - 2)
+                // trim the last comma
+                .replace(",", " ").trim()
+                .replace(" ", ",")
+                + "}";
+    }
+
+    private void goDeep(String moduleName, StringBuilder sb, Set<String> visited) {
+        if (!modulesDependencies.containsKey(moduleName)) {
+            if (!visited.contains(moduleName)) {
+                sb.append(moduleName).append(",");
+                visited.add(moduleName);
+            }
+            return;
+        }
+
+        modulesDependencies.get(moduleName).forEach(dep -> goDeep(dep, sb, visited));
+        if (!visited.contains(moduleName)) {
+            sb.append(moduleName).append(",");
+            visited.add(moduleName);
+        }
     }
 
     private void parseFile(File file) throws IOException {
@@ -37,10 +66,11 @@ public class ModuleGraph {
 
         var array = line.split(MODULE_NAME_SEPARATOR);
         var moduleName = array[0];
-        var moduleDeps = Arrays.asList(array[1].split(MODULE_DEPENDENCIES_SEPARATOR)).stream()
+
+        var dependencies = Arrays.asList(array[1].split(MODULE_DEPENDENCIES_SEPARATOR)).stream()
                 .map(String::trim).filter(str -> !str.isBlank()).collect(Collectors.toList());
 
-        nodesWithDep.put(moduleName, moduleDeps);
+        modulesDependencies.put(moduleName, dependencies);
     }
 
     private void validateLine(String line) {
@@ -55,7 +85,7 @@ public class ModuleGraph {
         }
     }
 
-    public Map<String, List<String>> getNodesWithDep() {
-        return nodesWithDep;
+    public Map<String, List<String>> getModulesDependencies() {
+        return modulesDependencies;
     }
 }
