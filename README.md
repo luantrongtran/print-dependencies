@@ -21,7 +21,7 @@ This is a maven project. This also includes maven wrapper inside the project
 
 ### run without IDE
 ```
-mvn compile exec:java
+./mvnw compile exec:java
 ```
 
 ### Following is an example of the input file
@@ -31,7 +31,13 @@ A: B,C,D
 C: E,F,G
 G: H,I
 ```
+- There are more example files can be found in `src/test/resources` folder
+
 
 ### This is a command line project
 - First it will wait until user input the full filename
-- Then enter the module which the user would like to find the dependency
+- Then enter the module which the user would like to find the dependencies
+- There 3 types of ouput:
+  - Has some dependencies: `{B,C}`
+  - Has no dependencies: `{}`
+  - And circular dependencies: `error`
