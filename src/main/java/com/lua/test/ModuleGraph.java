@@ -92,17 +92,17 @@ public class ModuleGraph {
     private void parseLine(String line) {
         validateLine(line);
 
-        var array = line.split(MODULE_NAME_SEPARATOR);
-        var moduleName = array[0];
+        String[] array = line.split(MODULE_NAME_SEPARATOR);
+        String moduleName = array[0];
 
-        var dependencies = Arrays.asList(array[1].split(MODULE_DEPENDENCIES_SEPARATOR)).stream()
+        List<String> dependencies = Arrays.asList(array[1].split(MODULE_DEPENDENCIES_SEPARATOR)).stream()
                 .map(String::trim).filter(str -> !str.isBlank()).collect(Collectors.toList());
 
         modulesDependencies.put(moduleName, dependencies);
     }
 
     private void validateLine(String line) {
-        var array = line.split(MODULE_NAME_SEPARATOR);
+        String[] array = line.split(MODULE_NAME_SEPARATOR);
 
         if (array.length < 2) {
             throw new InvalidInputFileFormatException();

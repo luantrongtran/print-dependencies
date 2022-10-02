@@ -7,3 +7,31 @@
 - It's a bit confusing in example 2 in which the getModuleDependencies(A) returns/print out A's last dependency which is D. However, getModuleDependencies(C) doesn't print out its last dependency which is E.
 - Because of the previous 2 points, I assume we don't print a dependency twice. And the getModuleDependencies(A) should print {B,E,F,H,D,I,G,C}
 - In example 3, it seems getModuleDependencies(G) should also result in error, because G->I->C->G
+
+## Java
+I tested on Java 15, but should be able to run with at least Java 8.
+
+## How to run the code
+This is a maven project. This also includes maven wrapper inside the project
+
+### Install project dependencies
+```
+./mvnw clean install
+```
+
+### run without IDE
+```
+mvn compile exec:java
+```
+
+### Following is an example of the input file
+- In each line, before colon is the module name, and after the colon is the depdencies of the module
+```
+A: B,C,D
+C: E,F,G
+G: H,I
+```
+
+### This is a command line project
+- First it will wait until user input the full filename
+- Then enter the module which the user would like to find the dependency

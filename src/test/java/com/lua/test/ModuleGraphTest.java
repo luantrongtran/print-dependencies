@@ -17,11 +17,11 @@ class ModuleGraphTest {
     @Test
     void testConstructor_GivenValidFile_ThenExpectAValidGraph() throws IOException {
         // Given
-        var firstModule = "A";
-        var firstModuleDeps = List.of("B", "C", "D");
+        String firstModule = "A";
+        List<String> firstModuleDeps = List.of("B", "C", "D");
 
-        var secondModule = "E";
-        var secondModuleDeps = List.of("F", "G");
+        String secondModule = "E";
+        List<String> secondModuleDeps = List.of("F", "G");
 
         // When
         moduleGraph = new ModuleGraph(new File(TEST_DIR + "test_constructor_valid_input.txt"));
@@ -30,11 +30,11 @@ class ModuleGraphTest {
         Map<String, List<String>> nodesWithDep = moduleGraph.getModulesDependencies();
 
         nodesWithDep.containsKey(firstModule);
-        var actualFirstModuleDeps = nodesWithDep.get(firstModule);
+        List<String> actualFirstModuleDeps = nodesWithDep.get(firstModule);
         Assertions.assertTrue(actualFirstModuleDeps.containsAll(firstModuleDeps));
 
         nodesWithDep.containsKey(secondModule);
-        var actualSecondModuleDeps = nodesWithDep.get(secondModule);
+        List<String> actualSecondModuleDeps = nodesWithDep.get(secondModule);
         Assertions.assertTrue(actualSecondModuleDeps.containsAll(secondModuleDeps));
     }
 
