@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 class ModuleGraphTest {
 
@@ -72,5 +71,25 @@ class ModuleGraphTest {
         Assertions.assertEquals("{H,D,I}", moduleGraph.getDependencies("G"));
         Assertions.assertEquals("{E,F,H,D,I,G}", moduleGraph.getDependencies("C"));
         Assertions.assertEquals("{B,E,F,H,D,I,G,C}", moduleGraph.getDependencies("A"));
+    }
+
+    @Test
+    void testPrintTree_GivenExample3_ThenPrintCorrectDependencies() throws IOException {
+        // Given
+        moduleGraph = new ModuleGraph(new File(TEST_DIR + "/test_get_dependencies_circular_ex3.txt"));
+
+        // When
+        Assertions.assertEquals("error", moduleGraph.getDependencies("G"));
+        Assertions.assertEquals("error", moduleGraph.getDependencies("C"));
+        Assertions.assertEquals("error", moduleGraph.getDependencies("A"));
+    }
+
+    @Test
+    void testPrintTree_GivenExample4_ThenPrintCorrectDependencies() throws IOException {
+        // Given
+        moduleGraph = new ModuleGraph(new File(TEST_DIR + "/test_get_dependencies_no_circular_ex4.txt"));
+
+        // When
+        Assertions.assertEquals("{B,D,I,C}", moduleGraph.getDependencies("A"));
     }
 }
